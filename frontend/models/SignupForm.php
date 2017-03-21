@@ -12,6 +12,10 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+    public $num_control;
+    public $nombre_completo;
+    public $carrera;
+    public $semestre;
 
 
     /**
@@ -21,18 +25,32 @@ class SignupForm extends Model
     {
         return [
             ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'required', 'message'=> 'Nombre de usuario requerido' ],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este nombre de usuario ya ha sido registrado.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
-            ['email', 'required'],
+            ['email', 'required', 'message'=> 'Correo Electronico requerido' ],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este correo ya ha sido registrado.'],
 
-            ['password', 'required'],
+            ['password', 'required', 'message'=> 'Contraseña requerida' ],
             ['password', 'string', 'min' => 6],
+
+            ['num_control', 'required', 'message'=> 'Numero de control requerido' ],
+            ['num_control', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este numero de control ya ha sido registrado.'],
+            ['num_control', 'string', 'min' => 9, 'max'=> 9],
+
+            ['nombre_completo', 'required', 'message'=> 'Nombre requerido' ],
+            ['nombre_completo', 'string', 'max' => 50],
+
+            ['carrera', 'required', 'message'=> 'Carrera requerida' ],
+            
+            ['semestre', 'required',  'message'=> 'Semestre requerida'],
+            ['semestre', 'string', 'min'=>1, 'max'=>2]
+
+
         ];
     }
 
@@ -53,6 +71,11 @@ class SignupForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         
+        $user->Num_Control = $this->num_control;
+        $user->Nombre_Completo = $this->nombre_completo;
+        $user->Carrera_IdCarrera = $this->carrera;
+        $user->Semestre = $this->semestre;
+
         return $user->save() ? $user : null;
     }
 }
