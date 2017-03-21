@@ -3,11 +3,11 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use backend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
+use backend\assets\AppAsset;
 use common\widgets\Alert;
 use Yii\helpers\Url;
 
@@ -20,9 +20,9 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Yii::$app->name ?></title>
+    <title><?= Html::encode(Yii::$app->name) ?></title>
     <?php $this->head() ?>
-    <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico?v=3" type="image/x-icon" />
 </head>
 <body>
 <?php $this->beginBody() ?>
