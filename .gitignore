@@ -33,3 +33,8 @@ phpunit.phar
 
 # vagrant runtime
 /.vagrant
+
+backend/views/Original/layouts/main.php
+backend/views/Original/site/error.php
+backend/views/Original/site/index.php
+backend/views/Original/site/login.php
