@@ -1,8 +1,11 @@
 <?php
 namespace frontend\models;
 
+use Yii;
+use yii\helpers\Url;
 use yii\base\Model;
 use common\models\User;
+use yii\web\UploadedFile;
 
 /**
  * Signup form
@@ -16,6 +19,8 @@ class SignupForm extends Model
     public $nombre_completo;
     public $carrera;
     public $semestre;
+    public $img_perfil;
+    public $file;
 
 
     /**
@@ -48,8 +53,11 @@ class SignupForm extends Model
             ['carrera', 'required', 'message'=> 'Carrera requerida' ],
             
             ['semestre', 'required',  'message'=> 'Semestre requerida'],
-            ['semestre', 'string', 'min'=>1, 'max'=>2]
+            ['semestre', 'string', 'min'=>1, 'max'=>2],
 
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png',],
+
+            ['img_perfil', 'string', 'min'=>1, 'max'=>200],
 
         ];
     }
@@ -66,6 +74,16 @@ class SignupForm extends Model
         }
         
         $user = new User();
+
+/*        $t = new \DateTime('now', new \DateTimeZone('America/Mexico_City'));
+        $d = $t->format('d-m-Y');*/
+
+        $imageName = $this->Num_Control/*.'-'.$d*/;
+        $this->file = UploadedFile::getInstance($this, 'file');
+        $this->file->saveAs(Url::to('@backend/web/images/').$imageName.'.'.$this->file->extension);
+
+        $user->Img_Perfil =  'images/'.$imageName.'.'.$this->file->extension; 
+
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);

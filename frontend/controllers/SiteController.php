@@ -141,6 +141,11 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+    public function actionUsuario()
+    {
+        return $this->render('usuario');
+    }
+
     /**
      * Signs user up.
      *
@@ -151,9 +156,9 @@ class SiteController extends Controller
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
+//                if (Yii::$app->getUser()->login($user)) {
+                    return $this->render('usuario');
+//                }
             }
         }
 

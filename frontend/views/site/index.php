@@ -10,7 +10,7 @@ $this->title = 'Inicio';
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Acceso a Residentes</h1>
+        <h1>Acceso al publico</h1>
 
         <p class="lead">Bienvenido a Resitver, la pagina que brinda servicio a los residentes del Instituto Tecnologico de Veracruz.</p>
         <?php echo Html::img('@web/media/LogoITV.jpg') ?>

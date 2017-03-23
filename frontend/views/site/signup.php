@@ -9,6 +9,8 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\widgets\Select2;
 use common\models\Carreras;
+use kartik\widgets\FileInput;
+
 
 $this->title = 'Registrarse';
 $this->params['breadcrumbs'][] = $this->title;
@@ -20,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-lg-5">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+            <?php $form = ActiveForm::begin(/*['id' => 'form-signup'], */['options' => ['enctype' => 'multipart/form-data']]); ?>
 
                 <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Nombre de Usuario') ?>
 
@@ -47,6 +49,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         'allowClear' => true
                     ],
                 ]); ?>
+
+                
+
+                <?= $form->field($model, 'file')->widget(FileInput::classname(), [
+                     'options' => ['accept' => 'image/*'],
+                    'pluginOptions' => ['previewFileType' => 'image', 'showUpload' => false, 'browseLabel' =>  'Buscar img...', 'removeLabel' => 'Eliminar',]
+                ])->label("Foto de Perfil"); ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
