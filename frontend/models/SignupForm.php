@@ -3,6 +3,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\FileHelper;
 use yii\base\Model;
 use common\models\User;
 use yii\web\UploadedFile;
@@ -75,15 +76,20 @@ class SignupForm extends Model
         
         $user = new User();
 
-/*        $t = new \DateTime('now', new \DateTimeZone('America/Mexico_City'));
-        $d = $t->format('d-m-Y');*/
+        $path = (Url::to('@backend/web/uploads/').$this->num_control);
+        $path2 = (Url::to('@backend/web/uploads/').$this->num_control.'/Documentacion');
+        $path3 = (Url::to('@backend/web/uploads/').$this->num_control.'/Reportes');
 
-        $imageName = $this->Num_Control/*.'-'.$d*/;
+        FileHelper::createDirectory($path);
+        FileHelper::createDirectory($path2);
+        FileHelper::createDirectory($path3);
+
         $this->file = UploadedFile::getInstance($this, 'file');
-        $this->file->saveAs(Url::to('@backend/web/images/').$imageName.'.'.$this->file->extension);
 
-        $user->Img_Perfil =  'images/'.$imageName.'.'.$this->file->extension; 
+        $this->file->saveAs(Url::to('@backend/web/uploads/').$this->num_control.'/'.$this->num_control.'.'.$this->file->extension);
 
+        $user->Img_Perfil =  'uploads/'.$this->num_control.'/'.$this->num_control.'.'.$this->file->extension;
+        
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
