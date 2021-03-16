@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\User */
 
-$this->title = 'Editar informacion: ' . $model->Nombre_Completo;
+$this->title = 'Editar informacion';
 $this->params['breadcrumbs'][] = ['label' => 'Mi Perfil', 'url' => ['user/view']];
 $this->params['breadcrumbs'][] = 'Editar Informacion'
 ?>

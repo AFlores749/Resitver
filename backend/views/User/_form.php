@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use kartik\widgets\Select2;
 use common\models\Carreras;
 use kartik\widgets\FileInput;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\User */
@@ -39,16 +40,28 @@ use kartik\widgets\FileInput;
                 'allowClear' => true
             ],
         ]); ?>
+       
 
-        
-
-        <?= $form->field($model, 'Img_Perfil')->widget(FileInput::classname(), [
-             'options' => ['accept' => 'image/*'],
-            'pluginOptions' => ['previewFileType' => 'image', 'showUpload' => false, 'browseLabel' =>  'Buscar img...', 'removeLabel' => 'Eliminar',]
+        <?= $form->field($model, 'file')->widget(FileInput::classname(), [
+             'options' => 
+                ['accept' => 'image/*'],
+                'pluginOptions' => [
+                    'initialPreview' => [Html::img(Yii::$app->request->baseUrl . '/' .$model->Img_Perfil, ['width' => '200']) ], 
+                    'overwriteInitial'=>true,
+                    'showRemove' => false,
+                    'previewFileType' => 'image', 
+                    'showUpload' => false,
+                    'showDelete' => false,
+                    'browseLabel' =>  'Buscar img...', 
+                    'initialPreviewConfig' => [
+                    ],
+                ]
         ])->label("Foto de Perfil"); ?>
 
+        <?= $form->field($model, 'Acerca_De')->TextArea()->label('Acerca De') ?>
+
         <div class="form-group">
-            <?= Html::submitButton('Actualizar', ['class' => 'btn btn-success', 'name' => 'signup-button']) ?>
+            <?= Html::submitButton('Actualizar', ['class' => 'btn btn-success', 'name' => 'update-button']) ?>
         </div>
 
 <?php ActiveForm::end(); ?>

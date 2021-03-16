@@ -22,7 +22,7 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode(Yii::$app->name) ?></title>
     <?php $this->head() ?>
-    <link rel="shortcut icon" href="/favicon.ico?v=3" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?= Yii::$app->request->baseUrl; ?>/favicon.ico" type="image/x-icon" />
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -38,12 +38,13 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Inicio', 'url' => ['/site/index']],
-        ['label' => 'Acerca De', 'url' => ['/site/about']],
         ['label' => 'Contacto', 'url' => ['/site/contact']],
+        ['label' => 'Registrate', 'url' => ['/site/signup']],
+        ['label' => 'Inicia Sesion', 'url' => Yii::$app->urlManagerBackend->createUrl('site/login')],
     ];
-    if (Yii::$app->user->isGuest) {
+/*    if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Registrate', 'url' => ['/site/signup']];
- /*       $menuItems[] = ['label' => 'Iniciar Sesion', 'url' => ['/site/login']];*/
+        $menuItems[] = ['label' => 'Iniciar Sesion', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
@@ -53,7 +54,7 @@ AppAsset::register($this);
             )
             . Html::endForm()
             . '</li>';
-    }
+    }*/
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => $menuItems,

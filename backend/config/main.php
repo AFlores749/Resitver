@@ -47,6 +47,12 @@ return [
             ],
         ],
         */
+    'urlManagerFrontend'=>[
+            'class' => 'yii\web\UrlManager',
+            'scriptUrl' => 'http://127.0.0.1/Resitver/',
+            'baseUrl' => 'http://127.0.0.1/Resitver/',
+        ],
+
     ],
     'params' => $params,
 ];

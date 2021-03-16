@@ -73,6 +73,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+
     }
 
     /**
@@ -80,7 +81,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionLogin()
+/*    public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -94,19 +95,19 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
-    }
+    }*/
 
     /**
      * Logs out the current user.
      *
      * @return mixed
      */
-    public function actionLogout()
+/*    public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
+    }*/
 
     /**
      * Displays contact page.
@@ -117,13 +118,16 @@ class SiteController extends Controller
     {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
-            }
+            if ($model->sendEmail()) {
+                Yii::$app->getSession()->setFlash('Listo');
+                return $this->redirect(['contact']);
+                Yii::$app->getSession()->removeFlash('Listo');
 
-            return $this->refresh();
+            } else {
+                Yii::$app->getSession()->setFlash('Error');
+                return $this->redirect(['contact']);
+                Yii::$app->getSession()->removeFlash('Error');
+            }
         } else {
             return $this->render('contact', [
                 'model' => $model,
@@ -136,15 +140,10 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionAbout()
+/*    public function actionAbout()
     {
         return $this->render('about');
-    }
-
-    public function actionUsuario()
-    {
-        return $this->render('usuario');
-    }
+    }*/
 
     /**
      * Signs user up.
@@ -156,9 +155,30 @@ class SiteController extends Controller
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-//                if (Yii::$app->getUser()->login($user)) {
-                    return $this->render('usuario');
-//                }
+                $id = $user->id;
+                $key = $user->auth_key;
+                $Subject = "Confirmar Registro";
+                $body = "<h3><center>Hola ". $user->Nombre_Completo .". Haga click en el siguiente link para finalizar su registro</center></h3>";
+                $body .= "<center><a href='http://resitver.x10.mx/site/confirm/" . $id ."''>Aqui </a> </center>";
+
+                $email = Yii::$app->mailer->compose()
+                ->setTo($user->email)
+                ->setFrom([Yii::$app->params["no-reply"] => 'Resitver'])
+                ->setSubject($Subject)
+                ->setHtmlBody($body)
+                ->send();
+
+                if(!$email){
+                    Yii::$app->getSession()->setFlash('Error');
+                    $model = User::find($user->id);
+                    $model->delete();
+                    return $this->redirect(['signup']);
+                    Yii::$app->getSession()->removeFlash('Error');  
+                } else {
+                    Yii::$app->getSession()->setFlash('Listo');
+                    return $this->redirect(['signup']);
+                    Yii::$app->getSession()->removeFlash('Listo');  
+                }
             }
         }
 
@@ -166,6 +186,27 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionConfirm($id)
+        {
+            $user = \common\models\User::find()->where([
+                'id' => $id,
+                'status' => 0,
+                ])->one();
+            if(!empty($user)){
+                $user->status = 10;
+                $user->save();                
+                Yii::$app->getSession()->setFlash('Listo');
+                return $this->redirect(['index']);
+                Yii::$app->getSession()->removeFlash('Listo');   
+            } else {
+                Yii::$app->getSession()->setFlash('Error');
+                return $this->redirect(['index']);   
+                Yii::$app->getSession()->removeFlash('Error');  
+            }
+        }
+
+
 
     /**
      * Requests password reset.
@@ -177,11 +218,14 @@ class SiteController extends Controller
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->session->setFlash('ListoPass');
+                return $this->redirect(['index']);
+                Yii::$app->getSession()->removeFlash('ListoPass');   
 
-                return $this->goHome();
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+                Yii::$app->session->setFlash('error');
+                return $this->redirect(['index']);
+                Yii::$app->getSession()->removeFlash('Listo');   
             }
         }
 
@@ -206,9 +250,9 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
-
-            return $this->goHome();
+            Yii::$app->session->setFlash('ListoReset');
+            return $this->redirect(['index']);
+            Yii::$app->getSession()->removeFlash('ListoReset');  
         }
 
         return $this->render('resetPassword', [

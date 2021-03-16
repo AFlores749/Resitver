@@ -76,20 +76,21 @@ class SignupForm extends Model
         
         $user = new User();
 
-        $path = (Url::to('@backend/web/uploads/').$this->num_control);
-        $path2 = (Url::to('@backend/web/uploads/').$this->num_control.'/Documentacion');
-        $path3 = (Url::to('@backend/web/uploads/').$this->num_control.'/Reportes');
+        $path = (Yii::getAlias('@uploads') .'/'.$this->num_control);
+        $path2 = (Yii::getAlias('@uploads') . '/' .$this->num_control.'/Documentacion');
+        $path3 = (Yii::getAlias('@uploads') . '/' .$this->num_control.'/Reportes');
 
         FileHelper::createDirectory($path);
         FileHelper::createDirectory($path2);
         FileHelper::createDirectory($path3);
 
-        $this->file = UploadedFile::getInstance($this, 'file');
+        if($this->file = UploadedFile::getInstance($this, 'file')){
+            $this->file->saveAs(Url::to(Yii::getAlias('@uploads') ).'/'.$this->num_control.'/'.$this->num_control.'.'.$this->file->extension);
+            $user->Img_Perfil =  'uploads/'.$this->num_control.'/'.$this->num_control.'.'.$this->file->extension;
+        } else {
+            $user->Img_Perfil =  'media/user.jpg';
+        }
 
-        $this->file->saveAs(Url::to('@backend/web/uploads/').$this->num_control.'/'.$this->num_control.'.'.$this->file->extension);
-
-        $user->Img_Perfil =  'uploads/'.$this->num_control.'/'.$this->num_control.'.'.$this->file->extension;
-        
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
@@ -99,6 +100,7 @@ class SignupForm extends Model
         $user->Nombre_Completo = $this->nombre_completo;
         $user->Carrera_IdCarrera = $this->carrera;
         $user->Semestre = $this->semestre;
+        $user->status = 0;
 
         return $user->save() ? $user : null;
     }

@@ -6,6 +6,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
 
+
 $this->title = 'Iniciar Sesion';
 
 $fieldOptions1 = [
@@ -62,7 +63,7 @@ $fieldOptions2 = [
         </div> -->
         <!-- /.social-auth-links -->
 
-        <a href="#">Olvidé mi contraseña</a><br>
+        <a href="//127.0.0.1/Resitver/frontend/web/site/request-password-reset">Olvidé mi contraseña</a><br>
 <!--        <a href="register.html" class="text-center">Registrarte</a> -->
 
     </div>

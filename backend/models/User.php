@@ -21,10 +21,15 @@ use Yii;
  * @property string $Nombre_Completo
  * @property integer $Carrera_IdCarrera
  * @property string $Img_Perfil
- * @property string $Semestre
+ * @property integer $Semestre
+ * @property string $Acerca_De
  *
  * @property Comentarios[] $comentarios
  * @property Documentacion[] $documentacions
+ * @property Followers[] $followers
+ * @property Followers[] $followers0
+ * @property User[] $idSiguiendos
+ * @property User[] $idSeguidors
  * @property Posts[] $posts
  * @property Proyectos[] $proyectos
  * @property Reportes[] $reportes
@@ -32,6 +37,8 @@ use Yii;
  */
 class User extends \yii\db\ActiveRecord
 {
+
+    public $file;
     /**
      * @inheritdoc
      */
@@ -58,6 +65,9 @@ class User extends \yii\db\ActiveRecord
             [['Num_Control'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['Carrera_IdCarrera'], 'exist', 'skipOnError' => true, 'targetClass' => Carreras::className(), 'targetAttribute' => ['Carrera_IdCarrera' => 'id']],
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png',],
+            [['Img_Perfil'], 'required'],
+            [['Acerca_De'], 'string', 'max' => 120],
         ];
     }
 
@@ -81,6 +91,7 @@ class User extends \yii\db\ActiveRecord
             'Carrera_IdCarrera' => 'Carrera',
             'Img_Perfil' => 'Imagen de Perfil',
             'Semestre' => 'Semestre',
+            'Acerca_De' => 'Acerca De',
         ];
     }
 
@@ -131,4 +142,36 @@ class User extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Carreras::className(), ['id' => 'Carrera_IdCarrera']);
     }
+
+ /** 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getFollowers() 
+   { 
+       return $this->hasMany(Followers::className(), ['id_seguidor' => 'id']); 
+   } 
+
+           /** 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getFollowed() 
+   { 
+       return $this->hasMany(Followers::className(), ['id_siguiendo' => 'id']); 
+   } 
+ 
+   /** 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getIdSiguiendo() 
+   { 
+       return $this->hasMany(User::className(), ['id' => 'id_siguiendo'])->viaTable('followers', ['id_seguidor' => 'id']); 
+   } 
+ 
+   /** 
+    * @return \yii\db\ActiveQuery 
+    */ 
+   public function getIdSeguidor() 
+   { 
+       return $this->hasMany(User::className(), ['id' => 'id_seguidor'])->viaTable('followers', ['id_siguiendo' => 'id']); 
+   }
 }

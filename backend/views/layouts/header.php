@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -21,13 +22,13 @@ use yii\helpers\Html;
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= Yii::$app->user->identity->Img_Perfil?>" class="user-image" alt="User Image"/>
+                        <img src="<?= Yii::$app->request->baseUrl . '/' . Yii::$app->user->identity->Img_Perfil?>" class="user-image" alt="User Image"/>
                         <span class="hidden-xs"><?= Yii::$app->user->identity->Nombre_Completo?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= Yii::$app->user->identity->Img_Perfil?>" class="img-circle"
+                            <img src="<?= Yii::$app->request->baseUrl . '/' . Yii::$app->user->identity->Img_Perfil?>" class="img-circle"
                                  alt="User Image"/>
 
                             <p>
@@ -40,7 +41,7 @@ use yii\helpers\Html;
                             <div class="pull-left">
                                 <?= Html::a(
                                     'Mi Perfil',
-                                    ['/user/view'],
+                                    ['/user/view', 'id' => Yii::$app->user->identity->id],
                                     ['class' => 'btn btn-default btn-flat']
                                 ) ?>
                             </div>
